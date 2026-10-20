@@ -6,6 +6,24 @@ const addDialogo = document.getElementById("addDialogo");
 const bloco3 = document.getElementById("bloco-3");
 const meuDialogo = document.getElementById("meuDialogo");
 
+// Array para guardar os hábitos
+let habitos = [];
+
+// Recupera os dados salvos
+const dadosSalvos = localStorage.getItem('habitos');
+
+if (dadosSalvos !== null) {
+    habitos = JSON.parse(dadosSalvos);
+}
+
+// Percorre os hábitos recuperados
+habitos.forEach(function(habito) {
+     criarCartao(
+        habito.tituloTexto, 
+        habito.categoriaTexto, 
+        habito.metaTexto)
+});
+
 // Guarda o cartão que está sendo editado
 let tarefaEditando = null;
 
@@ -27,7 +45,7 @@ addDialogo.addEventListener("click", function(event) {
     const tituloTexto = nomeHabito.value.trim();
     const categoriaTexto = categoriaHabito.value.trim();
     const metaTexto = metaDiaria.value.trim();
-
+    
     // Evita criar tarefas sem nome
     if (tituloTexto === "") {
         nomeHabito.focus();
@@ -36,15 +54,48 @@ addDialogo.addEventListener("click", function(event) {
 
     // Se existe uma tarefa selecionada, atualiza
     if (tarefaEditando !== null) {
+            
+        //Caso seja uma alteração e nao um novo!
+        //encontrar o objeto existente e atualizar suas propriedades.
+        const encontrado = habitos.find(function(habito) {
+        return habito.tituloTexto === tarefaEditando.querySelector("#titulo-2").textContent;
+    });
+        encontrado.tituloTexto = tituloTexto;
+        encontrado.categoriaTexto = categoriaTexto;
+        encontrado.metaTexto = metaTexto;
+
+        
         tarefaEditando.querySelector("#titulo-2").textContent = tituloTexto;
         tarefaEditando.querySelector(".categoria").textContent = categoriaTexto;
         tarefaEditando.querySelector(".sequencia1").textContent = metaTexto;
 
         // Encerra o modo de edição
         tarefaEditando = null;
+    } else { //Chamar a function que criei
+        criarCartao(tituloTexto, categoriaTexto, metaTexto)
 
-    } else {
-        // Cria um cartão novo
+        //  Criar um objeto novo e adicioná-lo ao array com push()
+        const habito = { 
+        tituloTexto: tituloTexto,
+        categoriaTexto: categoriaTexto,
+        metaTexto: metaTexto
+    };
+    habitos.push(habito)
+    }
+    // Converter habitos para JSON e salvar no localStorage.
+    const textoHabitos = JSON.stringify(habitos);
+    localStorage.setItem('habitos', textoHabitos)
+
+    // Limpa os campos e fecha o diálogo
+    nomeHabito.value = "";
+    categoriaHabito.value = "";
+    metaDiaria.value = "";
+
+    meuDialogo.close();
+});
+
+function criarCartao(tituloTexto, categoriaTexto, metaTexto) {
+     // Cria um cartão novo
         const meio = document.createElement("div");
         meio.className = "cartao-habito";
         meio.id = "meio";
@@ -65,7 +116,7 @@ addDialogo.addEventListener("click", function(event) {
         categoria.textContent = categoriaTexto;
 
         bloco18.append(titulo, sequencia, categoria);
-
+        
         // Cria os botões de ação
         const editarRemover = document.createElement("div");
         editarRemover.className = "editar-remover";
@@ -105,18 +156,22 @@ addDialogo.addEventListener("click", function(event) {
                 tarefaEditando = null;
             }
 
+            //encontrar a posição do objeto, para excluir.
+            const indiceHabito = habitos.findIndex(function(habito) {
+                return habito.tituloTexto === meio.querySelector("#titulo-2").textContent
+        });
+            if(indiceHabito !== -1){
+                habitos.splice(indiceHabito, 1)
+
+            // Salvar no localStorage.
+            const textoHabitos = JSON.stringify(habitos);
+            localStorage.setItem('habitos', textoHabitos)
+        
             meio.remove();
+        }
 
             if (bloco3.children.length === 0) {
                 bloco3.style.display = "none";
-            }
-        });
-    }
-
-    // Limpa os campos e fecha o diálogo
-    nomeHabito.value = "";
-    categoriaHabito.value = "";
-    metaDiaria.value = "";
-
-    meuDialogo.close();
-});
+        }
+    });
+ }
