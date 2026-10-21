@@ -16,9 +16,19 @@ if (dadosSalvos !== null) {
     habitos = JSON.parse(dadosSalvos);
 }
 
+habitos.forEach(habito => {
+  // Verifica se o ID não existe (é undefined ou ausente)
+  if (habito.id === undefined) {
+    habito.id = crypto.randomUUID();
+  }
+});
+const textoHabitos = JSON.stringify(habitos);
+localStorage.setItem('habitos', textoHabitos);
+
 // Percorre os hábitos recuperados
 habitos.forEach(function(habito) {
      criarCartao(
+        habito.id,
         habito.tituloTexto, 
         habito.categoriaTexto, 
         habito.metaTexto)
@@ -58,29 +68,34 @@ addDialogo.addEventListener("click", function(event) {
         //Caso seja uma alteração e nao um novo!
         //encontrar o objeto existente e atualizar suas propriedades.
         const encontrado = habitos.find(function(habito) {
-        return habito.tituloTexto === tarefaEditando.querySelector("#titulo-2").textContent;
+            return habito.id === tarefaEditando.getAttribute('data-id');
     });
-        encontrado.tituloTexto = tituloTexto;
-        encontrado.categoriaTexto = categoriaTexto;
-        encontrado.metaTexto = metaTexto;
+        if(encontrado !== undefined){
+            encontrado.tituloTexto = tituloTexto;
+            encontrado.categoriaTexto = categoriaTexto;
+            encontrado.metaTexto = metaTexto;
 
-        
         tarefaEditando.querySelector("#titulo-2").textContent = tituloTexto;
         tarefaEditando.querySelector(".categoria").textContent = categoriaTexto;
         tarefaEditando.querySelector(".sequencia1").textContent = metaTexto;
-
-        // Encerra o modo de edição
-        tarefaEditando = null;
-    } else { //Chamar a function que criei
-        criarCartao(tituloTexto, categoriaTexto, metaTexto)
-
+        } else {
+            return;
+        }
+            // Encerra o modo de edição
+            tarefaEditando = null;
+        
+    } else { 
         //  Criar um objeto novo e adicioná-lo ao array com push()
         const habito = { 
+        id: crypto.randomUUID(),
         tituloTexto: tituloTexto,
         categoriaTexto: categoriaTexto,
         metaTexto: metaTexto
     };
     habitos.push(habito)
+
+    //Chamar a function que criei
+    criarCartao(habito.id, tituloTexto, categoriaTexto, metaTexto)
     }
     // Converter habitos para JSON e salvar no localStorage.
     const textoHabitos = JSON.stringify(habitos);
@@ -94,11 +109,13 @@ addDialogo.addEventListener("click", function(event) {
     meuDialogo.close();
 });
 
-function criarCartao(tituloTexto, categoriaTexto, metaTexto) {
+function criarCartao(id, tituloTexto, categoriaTexto, metaTexto) {
      // Cria um cartão novo
         const meio = document.createElement("div");
         meio.className = "cartao-habito";
         meio.id = "meio";
+        // Guardar o ID no HTML
+        meio.setAttribute('data-id', id);
 
         const bloco18 = document.createElement("div");
         bloco18.id = "bloco-18";
@@ -158,7 +175,7 @@ function criarCartao(tituloTexto, categoriaTexto, metaTexto) {
 
             //encontrar a posição do objeto, para excluir.
             const indiceHabito = habitos.findIndex(function(habito) {
-                return habito.tituloTexto === meio.querySelector("#titulo-2").textContent
+               return habito.id === meio.getAttribute('data-id');
         });
             if(indiceHabito !== -1){
                 habitos.splice(indiceHabito, 1)
