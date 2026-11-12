@@ -10,7 +10,7 @@ O projeto foi desenvolvido utilizando **HTML5, CSS3 e JavaScript**, com foco na 
 
 ## Demonstração online
 
-Em desenvolvimento.
+Acesse a aplicação: [Controle de Hábitos](https://controle-de-habitosapp.netlify.app/)
 
 ## Preview
 
