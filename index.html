@@ -1,54 +1,60 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Controle de Hábitos - Versão 2</title>
-    <link rel="stylesheet" href="index.css">
-</head>
-<body>
-<div id="corpo-fora">
-    <div id="title">
-    <h1>Minhas tarefas</h1>
-</div>
-    <hr>
-    <div id="bloco-1">
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <div id="corpo-fora">
+      <div id="title">
+        <h1>Minhas tarefas</h1>
+      </div>
+      <hr />
+      <div id="bloco-1">
         <button type="button" id="botao-mais">Adicionar um novo hábito</button>
-    </div>
+      </div>
 
-    <dialog id="meuDialogo">
+      <dialog id="meuDialogo">
         <h2>Criar novo hábito</h2>
         <p class="descricao-dialogo">
-            Preencha as informações a seguir para uma melhor experiência.
+          Preencha as informações a seguir para uma melhor experiência.
         </p>
 
         <div class="campo-dialogo">
-            <label for="nomeHabito">Nome do hábito</label>
-            <input type="text" id="nomeHabito" placeholder="Ex.: Estudar JavaScript">
+          <label for="nomeHabito">Nome do hábito</label>
+          <input
+            type="text"
+            id="nomeHabito"
+            placeholder="Ex.: Estudar JavaScript"
+          />
         </div>
 
         <div class="campo-dialogo">
-            <label for="categoriaHabito">Categoria</label>
-            <input type="text" id="categoriaHabito" placeholder="Ex.: Estudos">
+          <label for="categoriaHabito">Categoria</label>
+          <input type="text" id="categoriaHabito" placeholder="Ex.: Estudos" />
         </div>
 
         <div class="campo-dialogo">
-            <label for="metaDiaria">Meta diária</label>
-            <input type="text" id="metaDiaria" placeholder="Ex.: 60 minutos">
+          <label for="metaDiaria">Meta diária</label>
+          <input type="text" id="metaDiaria" placeholder="Ex.: 60 minutos" />
         </div>
 
         <form method="dialog" class="acoes-dialogo">
-            <button type="submit" id="addDialogo">Adicionar</button>
-            <button type="submit" id="fecharDialogo"
-                onclick="document.getElementById('meuDialog').close()">Fechar</button>
+          <button type="submit" id="addDialogo">Adicionar</button>
+          <button
+            type="submit"
+            id="fecharDialogo"
+            onclick="document.getElementById('meuDialogo').close()"
+          >
+            Fechar
+          </button>
         </form>
-    </dialog>
-    
-<div id="bloco-3" style="display: none;">
-</div>
+      </dialog>
 
-
-</div>
+      <div id="bloco-3" style="display: none"></div>
+    </div>
     <script src="index.js" defer></script>
-</body>
+  </body>
 </html>
